@@ -9,12 +9,11 @@ export const AppDataSource = new DataSource({
   host: "localhost",
   port: 5432,
 
-  username: "postgres",
-  password: "13711373n",
-  database: "humanresources",
+  //username: "postgres",
+  //password: "13711373n",
+  //database: "humanresources",
 
-  entities: [User],
-
+entities: [__dirname + "/../entities/*.js"],
   synchronize: false,
   logging: true,
 });
