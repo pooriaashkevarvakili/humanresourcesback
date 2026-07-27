@@ -4,7 +4,8 @@ import { User } from "../entities/User";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "dpg-d919j8u7r5hc73cjfu60-a.oregon-postgres.render.com",
+    url: "postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a.oregon-postgres.render.com:5432/project_dashboard_gk1z",
+
   port: 5432,
   username: "project_dashboard_gk1z_user",
   password: "PASSWORD",
@@ -14,4 +15,5 @@ export const AppDataSource = new DataSource({
   },
   entities: [User],
   synchronize: true,
+  logging: true,
 });
