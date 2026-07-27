@@ -10,28 +10,33 @@ const database_1 = require("./config/database");
 const PORT = Number(process.env.PORT) || 3000;
 const startServer = async () => {
     try {
+        // Connect Database
         await database_1.AppDataSource.initialize();
         console.log("✅ Database connected");
-        const server = app_1.default.listen(PORT, () => {
+        // Start Server
+        const server = app_1.default.listen(PORT, "0.0.0.0", () => {
             console.log(`🚀 Server running on port ${PORT}`);
         });
-        // Graceful shutdown
-        process.on("SIGTERM", async () => {
-            console.log("SIGTERM received. Closing server...");
+        // Graceful shutdown function
+        const shutdown = async () => {
+            console.log("🛑 Shutdown signal received");
             server.close(async () => {
-                await database_1.AppDataSource.destroy();
-                console.log("Server closed");
-                process.exit(0);
+                try {
+                    if (database_1.AppDataSource.isInitialized) {
+                        await database_1.AppDataSource.destroy();
+                        console.log("✅ Database connection closed");
+                    }
+                    console.log("✅ Server closed");
+                    process.exit(0);
+                }
+                catch (error) {
+                    console.error("Shutdown error:", error);
+                    process.exit(1);
+                }
             });
-        });
-        process.on("SIGINT", async () => {
-            console.log("SIGINT received. Closing server...");
-            server.close(async () => {
-                await database_1.AppDataSource.destroy();
-                console.log("Server closed");
-                process.exit(0);
-            });
-        });
+        };
+        process.on("SIGTERM", shutdown);
+        process.on("SIGINT", shutdown);
     }
     catch (error) {
         console.error("❌ Server startup error:", error);
