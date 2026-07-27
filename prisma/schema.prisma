@@ -4,9 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z"
+  url      = "postgresql://project_dashboard_gk1z_user:PASSWORD@HOST:5432/project_dashboard_gk1z"
 }
-
 
 model User {
   id        Int      @id @default(autoincrement())
