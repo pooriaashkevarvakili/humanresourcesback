@@ -24,7 +24,6 @@ class AuthController {
     static { this.signin = async (req, res) => {
         try {
             const { email, password, captchaToken } = req.body;
-            // Verify captcha first
             await captcha_service_1.CaptchaService.verify(captchaToken);
             const result = await auth_service_1.AuthService.signin(email, password);
             res.cookie("accessToken", result.accessToken, {

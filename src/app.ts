@@ -4,7 +4,6 @@ import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import cookieParser from "cookie-parser";
-import userRoutes from "./routes/user.router";
 import authRoutes from "./routes/auth.router";
 
 import { swaggerSpec } from "./config/swagger";
@@ -37,13 +36,6 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 
-
-
-
-app.use(
-  "/api/v1/users",
-  userRoutes
-);
 
 
 app.use(

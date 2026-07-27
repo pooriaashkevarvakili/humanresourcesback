@@ -9,7 +9,6 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const user_router_1 = __importDefault(require("./routes/user.router"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const swagger_1 = require("./config/swagger");
 const app = (0, express_1.default)();
@@ -24,7 +23,6 @@ app.use((0, helmet_1.default)({
 }));
 app.use((0, morgan_1.default)("dev"));
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
-app.use("/api/v1/users", user_router_1.default);
 app.use("/api/v1/auth", auth_router_1.default);
 app.get("/", (req, res) => {
     res.status(200).json({
