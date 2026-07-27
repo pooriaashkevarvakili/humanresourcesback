@@ -17,10 +17,7 @@ const router = Router();
  *       200:
  *         description: Success
  */
-router.get(
-  "/",
-  UserController.getUsers
-);
+
 
 
 
@@ -37,10 +34,7 @@ router.get(
  *       200:
  *         description: Success
  */
-router.get(
-  "/profile",
-  authMiddleware,
-UserController.getProfile);
+
 
 
 export default router;

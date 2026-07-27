@@ -63,7 +63,6 @@ export class AuthController {
     } = req.body;
 
 
-    // Verify captcha first
     await CaptchaService.verify(
       captchaToken
     );
