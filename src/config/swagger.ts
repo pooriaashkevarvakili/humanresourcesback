@@ -17,7 +17,7 @@ export const swaggerSpec = swaggerJsdoc({
         description: "Local server",
       },
       {
-        url: "http://humanresourcesback.onrender.com",
+        url: "https://humanresourcesback.onrender.com",
         description: "Production server",
       },
     ],
