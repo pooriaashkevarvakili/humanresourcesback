@@ -12,53 +12,62 @@ const startServer = async () => {
 
   try {
 
+    // Connect Database
     await AppDataSource.initialize();
 
     console.log("✅ Database connected");
 
 
-    const server = app.listen(PORT, () => {
+    // Start Server
+    const server = app.listen(PORT, "0.0.0.0", () => {
+
       console.log(`🚀 Server running on port ${PORT}`);
+
     });
 
 
 
-    // Graceful shutdown
-    process.on("SIGTERM", async () => {
+    // Graceful shutdown function
+    const shutdown = async () => {
 
-      console.log("SIGTERM received. Closing server...");
+      console.log("🛑 Shutdown signal received");
 
 
       server.close(async () => {
 
-        await AppDataSource.destroy();
+        try {
 
-        console.log("Server closed");
+          if (AppDataSource.isInitialized) {
 
-        process.exit(0);
+            await AppDataSource.destroy();
+
+            console.log("✅ Database connection closed");
+
+          }
+
+
+          console.log("✅ Server closed");
+
+          process.exit(0);
+
+
+        } catch (error) {
+
+          console.error("Shutdown error:", error);
+
+          process.exit(1);
+
+        }
 
       });
 
-    });
+    };
 
 
 
-    process.on("SIGINT", async () => {
+    process.on("SIGTERM", shutdown);
 
-      console.log("SIGINT received. Closing server...");
-
-
-      server.close(async () => {
-
-        await AppDataSource.destroy();
-
-        console.log("Server closed");
-
-        process.exit(0);
-
-      });
-
-    });
+    process.on("SIGINT", shutdown);
 
 
 
