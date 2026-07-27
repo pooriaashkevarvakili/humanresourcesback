@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
-  "scripts": {
-    "dev": "nodemon",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+ "scripts": {
+  "dev": "nodemon",
+  "build": "tsc && prisma generate",
+  "start": "node dist/server.js",
+  "prisma:migrate:deploy": "prisma migrate deploy",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev",
+  "prisma:studio": "prisma studio",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
