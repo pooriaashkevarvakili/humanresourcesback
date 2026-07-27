@@ -1,9 +1,13 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../config/prisma";
+import { AppDataSource } from "../config/database";
+import { User } from "../entities/User";
 
 
 export class AuthService {
+
+  private static userRepository =
+    AppDataSource.getRepository(User);
 
 
   static async signup(
@@ -12,11 +16,12 @@ export class AuthService {
     password: string
   ) {
 
-    const existUser = await prisma.user.findUnique({
-      where: {
-        email
-      }
-    });
+    const existUser =
+      await this.userRepository.findOne({
+        where: {
+          email
+        }
+      });
 
 
     if (existUser) {
@@ -24,19 +29,22 @@ export class AuthService {
     }
 
 
-    const hashedPassword = await bcrypt.hash(
-      password,
-      10
-    );
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
 
-    const user = await prisma.user.create({
-      data: {
+
+    const user =
+      this.userRepository.create({
         username,
         email,
         password: hashedPassword
-      }
-    });
+      });
+
+
+
+    await this.userRepository.save(user);
+
 
 
     return {
@@ -55,46 +63,56 @@ export class AuthService {
   ) {
 
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email
-      }
-    });
+    const user =
+      await this.userRepository.findOne({
+        where: {
+          email
+        }
+      });
+
 
 
     if (!user) {
-      throw new Error("Invalid email or password");
+      throw new Error(
+        "Invalid email or password"
+      );
     }
 
 
 
-    const checkPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const checkPassword =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
+
 
 
     if (!checkPassword) {
-      throw new Error("Invalid email or password");
+      throw new Error(
+        "Invalid email or password"
+      );
     }
 
 
 
-    const accessToken = jwt.sign(
-      {
-        id: user.id,
-        email: user.email
-      },
-      process.env.JWT_SECRET!,
-      {
-        expiresIn: "1d"
-      }
-    );
+    const accessToken =
+      jwt.sign(
+        {
+          id: user.id,
+          email: user.email
+        },
+        process.env.JWT_SECRET!,
+        {
+          expiresIn: "1d"
+        }
+      );
 
 
 
     return {
       accessToken,
+
       user: {
         id: user.id,
         username: user.username,
@@ -103,6 +121,5 @@ export class AuthService {
     };
 
   }
-
 
 }

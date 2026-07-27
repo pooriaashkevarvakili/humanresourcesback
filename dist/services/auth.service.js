@@ -6,10 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const prisma_1 = require("../config/prisma");
+const database_1 = require("../config/database");
+const User_1 = require("../entities/User");
 class AuthService {
+    static { this.userRepository = database_1.AppDataSource.getRepository(User_1.User); }
     static async signup(username, email, password) {
-        const existUser = await prisma_1.prisma.user.findUnique({
+        const existUser = await this.userRepository.findOne({
             where: {
                 email
             }
@@ -18,13 +20,12 @@ class AuthService {
             throw new Error("Email already exists");
         }
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
-        const user = await prisma_1.prisma.user.create({
-            data: {
-                username,
-                email,
-                password: hashedPassword
-            }
+        const user = this.userRepository.create({
+            username,
+            email,
+            password: hashedPassword
         });
+        await this.userRepository.save(user);
         return {
             id: user.id,
             username: user.username,
@@ -32,7 +33,7 @@ class AuthService {
         };
     }
     static async signin(email, password) {
-        const user = await prisma_1.prisma.user.findUnique({
+        const user = await this.userRepository.findOne({
             where: {
                 email
             }

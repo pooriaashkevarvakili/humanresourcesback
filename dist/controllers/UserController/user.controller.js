@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
-const prisma_1 = require("../../config/prisma");
+const database_1 = require("../../config/database");
+const User_1 = require("../../entities/User");
 class UserController {
+    static { this.userRepository = database_1.AppDataSource.getRepository(User_1.User); }
     /**
      * Get all users
      */
-    static getUsers = async (req, res) => {
+    static { this.getUsers = async (req, res) => {
         try {
-            const users = await prisma_1.prisma.user.findMany({
+            const users = await this.userRepository.find({
                 select: {
                     id: true,
                     username: true,
@@ -29,11 +31,11 @@ class UserController {
                 message: "Internal server error"
             });
         }
-    };
+    }; }
     /**
      * Get logged in user profile
      */
-    static getProfile = async (req, res) => {
+    static { this.getProfile = async (req, res) => {
         try {
             if (!req.user) {
                 return res.status(401).json({
@@ -41,7 +43,7 @@ class UserController {
                     message: "Unauthorized"
                 });
             }
-            const user = await prisma_1.prisma.user.findUnique({
+            const user = await this.userRepository.findOne({
                 where: {
                     id: req.user.id
                 },
@@ -71,6 +73,6 @@ class UserController {
                 message: "Internal server error"
             });
         }
-    };
+    }; }
 }
 exports.UserController = UserController;

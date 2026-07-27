@@ -5,18 +5,15 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && prisma generate",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "postinstall": "prisma generate",
-    "prisma:generate": "prisma generate",
-    "prisma:studio": "prisma studio",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.19.3",
     "axios": "^1.18.1",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -26,9 +23,11 @@
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
-    "prisma": "^6.19.3",
+    "pg": "^8.22.0",
+    "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
+    "typeorm": "^1.1.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
-import { prisma } from "../../config/prisma";
 import { AuthRequest } from "../../middlewares/auth.middleware";
+import { AppDataSource } from "../../config/database";
+import { User } from "../../entities/User";
 
 
 export class UserController {
+
+
+  private static userRepository =
+    AppDataSource.getRepository(User);
+
 
 
   /**
@@ -16,15 +22,17 @@ export class UserController {
 
     try {
 
-      const users = await prisma.user.findMany({
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          createdAt: true,
-          updatedAt: true
-        }
-      });
+      const users =
+        await this.userRepository.find({
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        });
+
 
 
       return res.status(200).json({
@@ -33,9 +41,11 @@ export class UserController {
       });
 
 
+
     } catch (error) {
 
       console.error(error);
+
 
       return res.status(500).json({
         success: false,
@@ -62,38 +72,46 @@ export class UserController {
 
 
       if (!req.user) {
+
         return res.status(401).json({
           success: false,
           message: "Unauthorized"
         });
+
       }
 
 
 
-      const user = await prisma.user.findUnique({
 
-        where: {
-          id: req.user.id
-        },
+      const user =
+        await this.userRepository.findOne({
 
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          createdAt: true,
-          updatedAt: true
-        }
+          where: {
+            id: req.user.id
+          },
 
-      });
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true
+          }
+
+        });
+
 
 
 
       if (!user) {
+
         return res.status(404).json({
           success: false,
           message: "User not found"
         });
+
       }
+
 
 
 
@@ -107,10 +125,12 @@ export class UserController {
 
 
 
+
     } catch (error) {
 
 
       console.error(error);
+
 
 
       return res.status(500).json({

@@ -4,7 +4,7 @@ exports.AuthController = void 0;
 const auth_service_1 = require("../services/auth.service");
 const captcha_service_1 = require("../services/captcha.service");
 class AuthController {
-    static signup = async (req, res) => {
+    static { this.signup = async (req, res) => {
         try {
             const { username, email, password } = req.body;
             const user = await auth_service_1.AuthService.signup(username, email, password);
@@ -20,8 +20,8 @@ class AuthController {
                 message: error.message
             });
         }
-    };
-    static signin = async (req, res) => {
+    }; }
+    static { this.signin = async (req, res) => {
         try {
             const { email, password, captchaToken } = req.body;
             // Verify captcha first
@@ -45,6 +45,6 @@ class AuthController {
                 message: error.message
             });
         }
-    };
+    }; }
 }
 exports.AuthController = AuthController;
