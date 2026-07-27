@@ -1,6 +1,10 @@
 import { Router } from "express";
+import { UserController } from "../controllers/UserController/user.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
+
 
 const router = Router();
+
 
 /**
  * @swagger
@@ -13,8 +17,30 @@ const router = Router();
  *       200:
  *         description: Success
  */
-router.get("/", (req, res) => {
-  res.json([{ id: 1, name: "Pooria" }]);
-});
+router.get(
+  "/",
+  UserController.getUsers
+);
+
+
+
+/**
+ * @swagger
+ * /api/users/profile:
+ *   get:
+ *     summary: Get current user profile
+ *     tags:
+ *       - Users
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.get(
+  "/profile",
+  authMiddleware,
+UserController.getProfile);
+
 
 export default router;
