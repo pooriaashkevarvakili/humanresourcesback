@@ -13,12 +13,12 @@ export const swaggerSpec = swaggerJsdoc({
 
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Local server",
-      },
-      {
         url: "https://humanresourcesback.onrender.com",
         description: "Production server",
+      },
+      {
+        url: "http://localhost:3000",
+        description: "Local server",
       },
     ],
 
@@ -34,7 +34,6 @@ export const swaggerSpec = swaggerJsdoc({
   },
 
   apis: [
-    "./src/routes/*.ts",
     "./dist/routes/*.js",
   ],
 
