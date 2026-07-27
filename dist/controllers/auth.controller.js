@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const auth_service_1 = require("../services/auth.service");
+const captcha_service_1 = require("../services/captcha.service");
 class AuthController {
     static signup = async (req, res) => {
         try {
@@ -22,13 +23,15 @@ class AuthController {
     };
     static signin = async (req, res) => {
         try {
-            const { email, password } = req.body;
+            const { email, password, captchaToken } = req.body;
+            // Verify captcha first
+            await captcha_service_1.CaptchaService.verify(captchaToken);
             const result = await auth_service_1.AuthService.signin(email, password);
             res.cookie("accessToken", result.accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
-                maxAge: 15 * 60 * 1000
+                maxAge: 15 * 60 * 1000,
             });
             return res.status(200).json({
                 success: true,

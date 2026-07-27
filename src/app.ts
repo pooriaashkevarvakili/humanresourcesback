@@ -22,7 +22,9 @@ app.use(
   })
 );
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 
 app.use(morgan("dev"));
 
