@@ -1,20 +1,41 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
-const options: swaggerJsdoc.Options = {
+export const swaggerSpec = swaggerJsdoc({
+
   definition: {
     openapi: "3.0.0",
+
     info: {
       title: "Human Resources API",
       version: "1.0.0",
-      description: "REST API documentation",
+      description: "HR Management API",
     },
+
     servers: [
       {
         url: "http://localhost:3000",
+        description: "Local server",
+      },
+      {
+        url: "https://YOUR-RENDER-URL.onrender.com",
+        description: "Production server",
       },
     ],
-  },
-  apis: ["./src/routes/*.ts"],
-};
 
-export const swaggerSpec = swaggerJsdoc(options);
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+  },
+
+  apis: [
+    "./src/routes/*.ts",
+    "./dist/routes/*.js",
+  ],
+
+});

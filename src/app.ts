@@ -21,6 +21,7 @@ app.use(
       "http://localhost:5173",
       "https://dashboard-project-front-lgddw3jqf-pooriavakilis-projects.vercel.app",
     ],
+    
     credentials: true,
   })
 );
