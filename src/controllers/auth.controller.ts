@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 
+import { CaptchaService } from "../services/captcha.service";
 
 export class AuthController {
 
@@ -48,69 +49,61 @@ export class AuthController {
 
 
 
-  static signin = async (
-    req: Request,
-    res: Response
-  ) => {
+ static signin = async (
+  req: Request,
+  res: Response
+) => {
 
-    try {
+  try {
 
-      const {
-        email,
-        password
-      } = req.body;
-
-
-      const result = await AuthService.signin(
-        email,
-        password
-      );
+    const {
+      email,
+      password,
+      captchaToken
+    } = req.body;
 
 
-      res.cookie(
-        "accessToken",
-        result.accessToken,
-        {
-          httpOnly: true,
-
-          secure:
-            process.env.NODE_ENV === "production",
-
-          sameSite: "lax",
-
-          maxAge:
-            15 * 60 * 1000
-        }
-      );
+    // Verify captcha first
+    await CaptchaService.verify(
+      captchaToken
+    );
 
 
-
-      return res.status(200).json({
-
-        success: true,
-
-        message: "Login successful",
-
-        user: result.user
-
-      });
+    const result = await AuthService.signin(
+      email,
+      password
+    );
 
 
-    } catch (error: any) {
+    res.cookie(
+      "accessToken",
+      result.accessToken,
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 15 * 60 * 1000,
+      }
+    );
 
 
-      return res.status(401).json({
-
-        success: false,
-
-        message: error.message
-
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: result.user
+    });
 
 
-    }
+  } catch(error:any) {
 
-  };
+    return res.status(401).json({
+      success:false,
+      message:error.message
+    });
+
+  }
+
+};
 
 
 }
