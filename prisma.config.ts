@@ -1,6 +1,5 @@
 import "dotenv/config";
 
-console.log(process.env.DATABASE_URL);
 
 import { defineConfig, env } from "prisma/config";
 
