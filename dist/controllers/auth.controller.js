@@ -15,6 +15,7 @@ class AuthController {
             });
         }
         catch (error) {
+            console.error(error);
             return res.status(400).json({
                 success: false,
                 message: error.message
@@ -24,13 +25,22 @@ class AuthController {
     static { this.signin = async (req, res) => {
         try {
             const { email, password, captchaToken } = req.body;
+            console.log("Request Body:", req.body);
+            console.log("Captcha Token:", captchaToken);
+            if (!captchaToken) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Captcha token is required"
+                });
+            }
+            // Verify checkbox captcha
             await captcha_service_1.CaptchaService.verify(captchaToken);
             const result = await auth_service_1.AuthService.signin(email, password);
             res.cookie("accessToken", result.accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
-                maxAge: 15 * 60 * 1000,
+                maxAge: 24 * 60 * 60 * 1000
             });
             return res.status(200).json({
                 success: true,
@@ -39,6 +49,7 @@ class AuthController {
             });
         }
         catch (error) {
+            console.error(error);
             return res.status(401).json({
                 success: false,
                 message: error.message

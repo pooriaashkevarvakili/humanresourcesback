@@ -9,9 +9,13 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const swagger_1 = require("./config/swagger");
 const app = (0, express_1.default)();
+// =======================
+// Middleware
+// =======================
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
@@ -22,26 +26,40 @@ app.use((0, helmet_1.default)({
     contentSecurityPolicy: false,
 }));
 app.use((0, morgan_1.default)("dev"));
+// =======================
+// Rate Limit
+// =======================
+const limiter = (0, express_rate_limit_1.default)({
+    windowMs: 60 * 1000, // 1 minute
+    limit: 3,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+        console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
+        return res.status(429).json({
+            success: false,
+            message: "Too many requests",
+        });
+    },
+});
+// تست کنیم اصلا میرسه یا نه
+app.use("/api", (req, res, next) => {
+    console.log("MIDDLEWARE HIT:", req.method, req.originalUrl);
+    next();
+});
+app.use("/api", limiter);
+// =======================
+// Swagger
+// =======================
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
+// =======================
+// Routes
+// =======================
 app.use("/api/v1/auth", auth_router_1.default);
 app.get("/", (req, res) => {
-    res.status(200).json({
+    res.json({
         success: true,
-        message: "API is running 🚀",
-        version: "v1",
-    });
-});
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Route not found"
-    });
-});
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({
-        success: false,
-        message: err.message || "Internal Server Error"
+        message: "API running"
     });
 });
 exports.default = app;
