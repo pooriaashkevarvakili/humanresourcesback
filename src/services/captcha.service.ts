@@ -1,12 +1,16 @@
 import axios from "axios";
 
+
 export class CaptchaService {
+
 
   static async verify(
     token: string
   ): Promise<boolean> {
 
-    const secretKey = process.env.CAPTCHA_SECRET_KEY!;
+
+    const secretKey =
+      "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
 
 
     const { data } = await axios.post(
@@ -21,12 +25,25 @@ export class CaptchaService {
     );
 
 
+    console.log(
+      "Google Captcha Response:",
+      data
+    );
+
+
     if (!data.success) {
-      throw new Error("Invalid captcha");
+
+      throw new Error(
+        `Invalid captcha: ${
+          data["error-codes"]?.join(", ")
+        }`
+      );
+
     }
 
 
     return true;
+
   }
 
 }

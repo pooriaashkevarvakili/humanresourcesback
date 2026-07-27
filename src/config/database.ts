@@ -1,25 +1,41 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { User } from "../entities/User";
+import swaggerJsdoc from "swagger-jsdoc";
 
-export const AppDataSource = new DataSource({
+export const swaggerSpec = swaggerJsdoc({
 
-  type: "postgres",
+  definition: {
+    openapi: "3.0.0",
 
-  url: "postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z",
-//username: "postgres",
-//password: "13711373n",
-//database: "humanresources",
-  ssl: {
-    rejectUnauthorized: false,
+    info: {
+      title: "Human Resources API",
+      version: "1.0.0",
+      description: "HR Management API",
+    },
+
+    servers: [
+      {
+        url: "https://humanresourcesback.onrender.com",
+        description: "Production",
+      },
+      {
+        url: "http://localhost:3000",
+        description: "Local",
+      },
+    ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
 
-  entities: [
-    User
+  apis: [
+    "./src/routes/**/*.ts",
+    "./dist/routes/**/*.js",
   ],
 
-
-  synchronize: true,
-
-  logging: true,
 });

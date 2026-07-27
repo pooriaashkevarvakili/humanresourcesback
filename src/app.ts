@@ -4,22 +4,26 @@ import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.router";
+import rateLimit from "express-rate-limit";
 
+import authRoutes from "./routes/auth.router";
 import { swaggerSpec } from "./config/swagger";
 
 
 const app = express();
 
 
+// =======================
+// Middleware
+// =======================
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 
 app.use(helmet({
   contentSecurityPolicy: false,
@@ -29,6 +33,53 @@ app.use(morgan("dev"));
 
 
 
+// =======================
+// Rate Limit
+// =======================
+
+const limiter = rateLimit({
+
+  windowMs: 60 * 1000, // 1 minute
+  limit: 3,
+
+  standardHeaders: true,
+  legacyHeaders: false,
+
+  handler: (req, res) => {
+
+    console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
+
+    return res.status(429).json({
+      success: false,
+      message: "Too many requests",
+    });
+
+  },
+
+});
+
+
+// تست کنیم اصلا میرسه یا نه
+app.use("/api", (req, res, next) => {
+
+  console.log(
+    "MIDDLEWARE HIT:",
+    req.method,
+    req.originalUrl
+  );
+
+  next();
+
+});
+
+
+app.use("/api", limiter);
+
+
+
+// =======================
+// Swagger
+// =======================
 
 app.use(
   "/api-docs",
@@ -38,6 +89,10 @@ app.use(
 
 
 
+// =======================
+// Routes
+// =======================
+
 app.use(
   "/api/v1/auth",
   authRoutes
@@ -45,46 +100,14 @@ app.use(
 
 
 
+app.get("/", (req,res)=>{
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "API is running 🚀",
-    version: "v1",
-  });
-});
-
-
-
-app.use((req, res) => {
-
-  res.status(404).json({
-    success:false,
-    message:"Route not found"
+  res.json({
+    success:true,
+    message:"API running"
   });
 
 });
-
-
-
-
-app.use(
-  (
-    err:Error,
-    req:express.Request,
-    res:express.Response,
-    next:express.NextFunction
-  )=>{
-
-    console.error(err);
-
-    res.status(500).json({
-      success:false,
-      message:err.message || "Internal Server Error"
-    });
-
-  }
-);
 
 
 export default app;

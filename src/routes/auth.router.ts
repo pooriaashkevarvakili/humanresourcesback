@@ -3,11 +3,12 @@ import { AuthController } from "../controllers/auth.controller";
 
 const router = Router();
 
+
 /**
  * @swagger
  * tags:
- *   name: Auth
- *   description: Authentication APIs
+ *   - name: Auth
+ *     description: Authentication APIs
  */
 
 
@@ -15,7 +16,7 @@ const router = Router();
  * @swagger
  * /api/v1/auth/signup:
  *   post:
- *     summary: Register new user
+ *     summary: Create a new user account
  *     tags:
  *       - Auth
  *     requestBody:
@@ -37,11 +38,18 @@ const router = Router();
  *                 example: pooria@gmail.com
  *               password:
  *                 type: string
- *                 example: 123456
+ *                 example: "123456"
  *     responses:
  *       201:
- *         description: User created
+ *         description: User created successfully
+ *       400:
+ *         description: Bad request
  */
+router.post(
+  "/signup",
+  AuthController.signup
+);
+
 
 
 
@@ -52,33 +60,46 @@ const router = Router();
  *     summary: Login user
  *     tags:
  *       - Auth
+ *
  *     requestBody:
  *       required: true
+ *
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *
  *             required:
  *               - email
  *               - password
+ *               - captchaToken
+ *
  *             properties:
  *               email:
  *                 type: string
  *                 example: pooria@gmail.com
+ *
  *               password:
  *                 type: string
- *                 example: 123456
+ *                 example: "123456"
+ *
+ *               captchaToken:
+ *                 type: string
+ *                 example: "03AFcWeA..."
+ *                 description: Google reCAPTCHA response token
+ *
+ *
  *     responses:
+ *
  *       200:
  *         description: Login successful
+ *
+ *       400:
+ *         description: Captcha token is missing
+ *
+ *       401:
+ *         description: Invalid captcha or credentials
  */
-
-router.post(
-  "/signup",
-  AuthController.signup
-);
-
-
 router.post(
   "/signin",
   AuthController.signin
