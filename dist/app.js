@@ -10,6 +10,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const image_router_1 = __importDefault(require("./routes/image.router"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const swagger_1 = require("./config/swagger");
 const app = (0, express_1.default)();
@@ -52,6 +53,7 @@ app.use("/api", limiter);
 // Swagger
 // =======================
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
+app.use("/image", image_router_1.default);
 // =======================
 // Routes
 // =======================

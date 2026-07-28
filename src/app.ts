@@ -5,10 +5,11 @@ import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
-
+import imageRoutes from "./routes/image.router";
 import authRoutes from "./routes/auth.router";
 import { swaggerSpec } from "./config/swagger";
-
+import {getImageHumanresources} from './controllers/portfolio.controller'
+import path from "path";
 
 const app = express();
 
@@ -86,7 +87,10 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec)
 );
-
+app.use(
+  "/image",
+  imageRoutes
+);
 
 
 // =======================
