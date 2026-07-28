@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
  */
 /**
  * @swagger
- * /image/image-humanresources:
+ * /api/v1/image/image-humanresources:
  *   get:
  *     summary: Get human resources image
  *     tags: [Images]

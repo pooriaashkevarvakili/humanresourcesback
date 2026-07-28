@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /image/image-humanresources:
+ * /api/v1/image/image-humanresources:
  *   get:
  *     summary: Get human resources image
  *     tags: [Images]
