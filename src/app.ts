@@ -42,26 +42,26 @@ app.use(morgan("dev"));
 // Rate Limit
 // =======================
 
-// const limiter = rateLimit({
+const limiter = rateLimit({
 
-//   windowMs: 60 * 1000, // 1 minute
-//   limit: 3,
+  windowMs: 60 * 1000, // 1 minute
+  limit: 3,
 
-//   standardHeaders: true,
-//   legacyHeaders: false,
+  standardHeaders: true,
+  legacyHeaders: false,
 
-//   handler: (req, res) => {
+  handler: (req, res) => {
 
-//     console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
+    console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
 
-//     return res.status(429).json({
-//       success: false,
-//       message: "Too many requests",
-//     });
+    return res.status(429).json({
+      success: false,
+      message: "Too many requests",
+    });
 
-//   },
+  },
 
-// });
+});
 
 
 // تست کنیم اصلا میرسه یا نه
@@ -78,7 +78,7 @@ app.use("/api", (req, res, next) => {
 });
 
 
-// app.use("/api", limiter);
+ app.use("/api", limiter);
 
 
 
