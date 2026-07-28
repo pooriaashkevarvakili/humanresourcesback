@@ -13,8 +13,8 @@ class AuthService {
     static async signup(username, email, password) {
         const existUser = await this.userRepository.findOne({
             where: {
-                email
-            }
+                email,
+            },
         });
         if (existUser) {
             throw new Error("Email already exists");
@@ -23,20 +23,20 @@ class AuthService {
         const user = this.userRepository.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
         });
         await this.userRepository.save(user);
         return {
             id: user.id,
             username: user.username,
-            email: user.email
+            email: user.email,
         };
     }
     static async signin(email, password) {
         const user = await this.userRepository.findOne({
             where: {
-                email
-            }
+                email,
+            },
         });
         if (!user) {
             throw new Error("Invalid email or password");
@@ -45,19 +45,20 @@ class AuthService {
         if (!checkPassword) {
             throw new Error("Invalid email or password");
         }
+        const JWT_SECRET = "change-this-to-a-strong-secret";
         const accessToken = jsonwebtoken_1.default.sign({
             id: user.id,
-            email: user.email
-        }, process.env.JWT_SECRET, {
-            expiresIn: "1d"
+            email: user.email,
+        }, JWT_SECRET, {
+            expiresIn: "1d",
         });
         return {
             accessToken,
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email
-            }
+                email: user.email,
+            },
         };
     }
 }
