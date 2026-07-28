@@ -92,7 +92,7 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 app.use(
-  "/image",
+  "/api/v1/image",
   imageRoutes
 );
 

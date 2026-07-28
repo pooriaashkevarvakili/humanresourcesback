@@ -54,7 +54,7 @@ app.use("/api", (req, res, next) => {
 // Swagger
 // =======================
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
-app.use("/image", image_router_1.default);
+app.use("/api/v1/image", image_router_1.default);
 // =======================
 // Routes
 // =======================
