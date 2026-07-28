@@ -9,7 +9,6 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const image_router_1 = __importDefault(require("./routes/image.router"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const swagger_1 = require("./config/swagger");
@@ -32,25 +31,25 @@ app.use((0, morgan_1.default)("dev"));
 // =======================
 // Rate Limit
 // =======================
-const limiter = (0, express_rate_limit_1.default)({
-    windowMs: 60 * 1000, // 1 minute
-    limit: 3,
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-        console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
-        return res.status(429).json({
-            success: false,
-            message: "Too many requests",
-        });
-    },
-});
+// const limiter = rateLimit({
+//   windowMs: 60 * 1000, // 1 minute
+//   limit: 3,
+//   standardHeaders: true,
+//   legacyHeaders: false,
+//   handler: (req, res) => {
+//     console.log("🔥 RATE LIMIT BLOCK:", req.originalUrl);
+//     return res.status(429).json({
+//       success: false,
+//       message: "Too many requests",
+//     });
+//   },
+// });
 // تست کنیم اصلا میرسه یا نه
 app.use("/api", (req, res, next) => {
     console.log("MIDDLEWARE HIT:", req.method, req.originalUrl);
     next();
 });
-app.use("/api", limiter);
+// app.use("/api", limiter);
 // =======================
 // Swagger
 // =======================
