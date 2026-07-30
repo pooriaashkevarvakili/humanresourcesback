@@ -6,14 +6,12 @@ const typeorm_1 = require("typeorm");
 const User_1 = require("../entities/User");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
-    url: "postgresql://project_dashboard_gk1z_user:xxxxx@dpg-d919j8u7r5hc73cjfu60-a.oregon-postgres.render.com:5432/project_dashboard_gk1z",
-    //username: "postgres",
-    //password: "13711373n",
-    database: "humanresources",
+    url: "postgresql://USER:PASSWORD:HOST:PORT/DATABASE",
     ssl: {
         rejectUnauthorized: false,
     },
-    entities: [User_1.User],
+    entities: [
+        User_1.User
+    ],
     synchronize: true,
-    // logging: true,
 });
