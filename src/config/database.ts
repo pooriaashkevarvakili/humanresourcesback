@@ -5,15 +5,16 @@ import { User } from "../entities/User";
 export const AppDataSource = new DataSource({
   type: "postgres",
 
-url:"postgresql://project_dashboard_gk1z_user:password@dpg-xxxxxxxx-a.oregon-postgres.render.com:5432/project_dashboard_gk1z",
+  url: process.env.DATABASE_URL,
+
   ssl: {
     rejectUnauthorized: false,
   },
 
   extra: {
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    max: 5,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
   },
 
   entities: [
