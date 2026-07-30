@@ -9,7 +9,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     url: "postgresql://project_dashboard_gk1z_user:61hfaDfadNapDaIL9EdMP9ii1i9nMf30@dpg-d919j8u7r5hc73cjfu60-a/project_dashboard_gk1z",
     //username: "postgres",
     //password: "13711373n",
-    //database: "humanresources",
+    database: "humanresources",
     ssl: {
         rejectUnauthorized: false,
     },

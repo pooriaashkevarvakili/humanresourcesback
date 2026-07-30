@@ -14,9 +14,7 @@ import path from "path";
 const app = express();
 
 
-// =======================
-// Middleware
-// =======================
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -38,13 +36,9 @@ app.use(morgan("dev"));
 
 
 
-// =======================
-// Rate Limit
-// =======================
-
 const limiter = rateLimit({
 
-  windowMs: 60 * 1000, // 1 minute
+  windowMs: 60 * 1000,
   limit: 3,
 
   standardHeaders: true,
@@ -64,7 +58,6 @@ const limiter = rateLimit({
 });
 
 
-// تست کنیم اصلا میرسه یا نه
 app.use("/api", (req, res, next) => {
 
   console.log(
@@ -82,9 +75,7 @@ app.use("/api", (req, res, next) => {
 
 
 
-// =======================
-// Swagger
-// =======================
+
 
 app.use(
   "/api-docs",
@@ -97,9 +88,7 @@ app.use(
 );
 
 
-// =======================
-// Routes
-// =======================
+
 
 app.use(
   "/api/v1/auth",
