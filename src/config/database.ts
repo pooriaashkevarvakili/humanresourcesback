@@ -5,7 +5,7 @@ import { User } from "../entities/User";
 export const AppDataSource = new DataSource({
   type: "postgres",
 
-  url: process.env.DATABASE_URL,
+  url: "postgresql://project_dashboard_gk1z_user:password@dpg-xxxx-a.oregon-postgres.render.com:5432/project_dashboard_gk1z",
 
   ssl: true,
 
