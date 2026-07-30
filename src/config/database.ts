@@ -5,9 +5,11 @@ import { User } from "../entities/User";
 export const AppDataSource = new DataSource({
   type: "postgres",
 
-  url: "postgresql://project_dashboard_gk1z_user:password@dpg-xxxx-a.oregon-postgres.render.com:5432/project_dashboard_gk1z",
+  url: "postgresql://humanresources_project_user:Y2w4M1JwGVO24bODPQkdrcaDt8AO9CBO@dpg-d9lk99f10e5c73ds4g5g-a/humanresources_project",
 
-  ssl: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 
   entities: [
     User
