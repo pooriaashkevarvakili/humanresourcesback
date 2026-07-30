@@ -7,16 +7,10 @@ const User_1 = require("../entities/User");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
     url: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-    extra: {
-        max: 5,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 10000,
-    },
+    ssl: true,
     entities: [
         User_1.User
     ],
     synchronize: true,
+    logging: true,
 });
